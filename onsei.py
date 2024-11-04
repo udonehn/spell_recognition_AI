@@ -20,3 +20,4 @@ with sr.Microphone() as source:
         print("音声を理解できませんでした")
     except sr.RequestError as e:
         print(f"音声認識サービスに接続できませんでした: {e}")
+        #test
