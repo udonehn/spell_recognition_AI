@@ -1,7 +1,7 @@
 import pygame
 import sys
 import random  # randomモジュールをインポート
-import onsei
+from voice_recognition import onsei
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

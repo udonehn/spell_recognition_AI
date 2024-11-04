@@ -1,5 +1,5 @@
 import speech_recognition as sr
-import spell
+from . import spell
 
 
 def onsei():
@@ -19,12 +19,13 @@ def onsei():
             # Google Web Speech APIを使って音声を文字起こし
             text = recognizer.recognize_google(audio, language='ja-JP')
             print(text)
-            get_score = spell.get_score(text)
-            print("result: " + get_score)
+            score, reason = spell.get_score(text).split("\n")
+            print("score: " + score)
+            print("reason: " + reason)
         except sr.UnknownValueError:
             print("音声を理解できませんでした")
         except sr.RequestError as e:
             print(f"音声認識サービスに接続できませんでした: {e}")
             #test
         
-        return get_score
+        return score
