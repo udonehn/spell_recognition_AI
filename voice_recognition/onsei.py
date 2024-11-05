@@ -2,7 +2,7 @@ import speech_recognition as sr
 from . import spell
 
 
-def onsei():
+def get_score_by_voice():
     # 音声認識器のインスタンスを作成
     recognizer = sr.Recognizer()
 

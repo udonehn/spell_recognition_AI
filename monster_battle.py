@@ -6,9 +6,9 @@ from voice_recognition import onsei
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
-imgBtlBG = pygame.image.load("btlbg.png")
-imgEnemy = pygame.image.load("knight.png")
-imgEffect = pygame.image.load("effect_b.png")  # エフェクト画像
+imgBtlBG = pygame.image.load("assets/btlbg.png")
+imgEnemy = pygame.image.load("assets/knight.png")
+imgEffect = pygame.image.load("assets/effect_b.png")  # エフェクト画像
 
 emy_x = 440 - imgEnemy.get_width() / 2
 emy_y = 560 - imgEnemy.get_height()
@@ -92,7 +92,7 @@ def draw_start_screen(bg, fnt):
     ranking_label_rect = ranking_label.get_rect(center=ranking_button_rect.center)
     bg.blit(ranking_label, ranking_label_rect)  # ランキングボタンのラベルを描画
 
-def draw_ranking_screen(bg, fnt, spell):
+def draw_ranking_screen(bg, fnt):
     bg.blit(imgBtlBG, [0, 0])  # 戦闘画面の背景を使用
     title_font = pygame.font.Font(None, 80)  # フォントサイズを80に変更
     title_color = (random.randint(128, 255), random.randint(0, 128), random.randint(0, 128))  # ホラーっぽい色
@@ -147,7 +147,7 @@ def main():
                         spell_value = random.randint(5, 20)  # ランダムな攻撃力を設定
 
 
-                        spell_value = onsei.onsei()  # 音声認識
+                        spell_value = onsei.get_score_by_voice()  # 音声認識
 
 
                         damage_displayed = True  # ダメージ表示フラグをセット

@@ -1,5 +1,7 @@
 import os
 from openai import OpenAI
+import jaconv # kanzi to hiragana
+from janome.tokenizer import Tokenizer
 
 api_key = ''
 
@@ -45,7 +47,7 @@ example 2(in the case of エクスプロージョン):
 500 points more related to ファイア. You finally get 500 points.
 
 
-example 3(in the case of 黒棺(くろひつぎ)):
+example 3(in the case of 黒棺):
 0
 No score that meets the criteria. You finally get 0 points.
 
@@ -139,6 +141,8 @@ def get_score(spell):
 
 def get_extra_score(spell):
     extra_points = 0
+    spell = kanji_to_hiragana(spell)
+    print(spell)
     for letter in spell:
         if letter in extra_scores_dict:
             print(f"{letter}: {extra_scores_dict[letter]}")
@@ -146,5 +150,17 @@ def get_extra_score(spell):
     return extra_points
 
 
-# spell = "アイシクルランス"
-# print(get_score(spell))
+        
+def kanji_to_hiragana(text):
+    tokenizer = Tokenizer()
+    hiragana_text = ""
+    
+    for token in tokenizer.tokenize(text):
+        # if token is kanzi
+        if token.reading != "*":
+            hiragana_text += jaconv.kata2hira(token.reading)
+        # if token is not kanzi
+        else:
+            hiragana_text += token.surface
+            
+    return hiragana_text
