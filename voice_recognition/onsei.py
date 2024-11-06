@@ -2,7 +2,7 @@ import speech_recognition as sr
 from . import spell
 
 
-def get_score_by_voice():
+def get_score_by_voice() -> int:
     # 音声認識器のインスタンスを作成
     recognizer = sr.Recognizer()
 

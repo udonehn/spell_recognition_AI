@@ -144,12 +144,8 @@ def main():
                 if event.button == 1:
                     if attack_button_rect.collidepoint(event.pos) and casted:
                         # 攻撃ボタンが押された場合
-                        spell_value = random.randint(5, 20)  # ランダムな攻撃力を設定
-
-
+                        # spell_value = random.randint(5, 20)  # ランダムな攻撃力を設定
                         spell_value = onsei.get_score_by_voice()  # 音声認識
-
-
                         damage_displayed = True  # ダメージ表示フラグをセット
                         effect_displayed = True  # エフェクト表示フラグをセット
                         effect_start_time = pygame.time.get_ticks()  # エフェクト開始時刻を記録

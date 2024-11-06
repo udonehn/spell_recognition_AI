@@ -6,7 +6,7 @@ from janome.tokenizer import Tokenizer
 api_key = ''
 
 system_message = """
-You are an AI that scores between 0 and 100 depending on the strength of the order.
+You are an AI that scores according to the strength of the order.
 
 If the user gives you an order, score it.
 
@@ -26,13 +26,7 @@ However, you have to meet the criteria below.
 12. when ブースト is detected 700 points added.
 13. when サンダー is detected 650 points added. 
 
-Also, score each Japanese letter and add more.
-
-あ:80点, い:75点, う:90点, え:70点, お:85点, か:80点, が(濁音):90点, き:85点, ぎ(濁音):95点, く:90点, ぐ(濁音):95点, け:75点, げ(濁音):85点, こ:85点, ご(濁音):90点, さ:70点, ざ(濁音):85点, し:90点, じ(濁音):95点, す:80点, ず(濁音):90点, せ:75点, ぜ(濁音):85点, そ:70点, ぞ(濁音):85点, た:90点, だ(濁音):95点, ち:95点, ぢ(濁音):90点, つ:90点, づ(濁音):95点, て:85点, で(濁音):90点, と:90点, ど(濁音):95点, な:75点, に:70点, ぬ:80点, ね:75点, の:80点, は(半濁音):85点, ば(濁音):90点, ぱ(半濁音):80点, ひ:75点, び(濁音):90点, ぴ(半濁音):85点, ふ(半濁音):80点, ぶ(濁音):90点, ぷ(半濁音):85点, へ:70点, べ(濁音):85点, ぺ(半濁音):80点, ほ(半濁音):85点, ぼ(濁音):90点, ぽ(半濁音):85点, ま:90点, み:70点, む:85点, め:75点, も:90点, や:80点, ゆ:75点, よ:85点, ら:90点, り:85点, る:80点, れ:75点, ろ:80点, わ:75点, を:70点, ん:95点, ー:95点
-You don't have to score small letters (捨て仮) like ぁ, ぃ, ぅ, ぇ, ぉ, っ, ゃ, ゅ, ょ.
-
-
-If your order does not meet the above criteria, don't add your score arbitrarily.
+If your order does not meet the above criteria, add your score arbitrarily.
 
 Print out the score, and let me know why in the lower line.
 
@@ -42,27 +36,31 @@ example 1(in the case of ファイアボール):
 700
 500 points more related to ファイア, 200 points more related to ボール. You finally get 700 points.
 
-example 2(in the case of エクスプロージョン):
+example 2(in the case of エターナルフレア):
 500
 500 points more related to ファイア. You finally get 500 points.
-
 
 example 3(in the case of 黒棺):
 0
 No score that meets the criteria. You finally get 0 points.
 
-example 3(in the case of サンダースピア):
+example 4(in the case of サンダースピア):
 1000
 650 points more related to サンダー, 350 points more related to スピア. You finally get 1000 points.
+
+example 5(in the case of フロストバインド):
+250
+250 points more related to アイス. You finally get 250 points.
+
+example 6(in the case of 氷華封):
+250
+250 points more related to アイス. You finally get 250 points.
+
+example 7(in the case of エクスプロージョン):
+500
+500 points more related to ファイア. You finally get 500 points.
+
 """
-
-
-
-"""
-If your order does not meet the above criteria, add your score arbitrarily.
-If your order doesn't meet the above criteria, don't add your score arbitrarily.
-"""
-
 
 
 client = OpenAI(api_key=api_key)
@@ -101,25 +99,7 @@ extra_scores_dict = {
 }
 
 
-
-def call_gpt(prompt, model="gpt-3.5-turbo-0125", max_tokens=150, temperature=0.7, top_p=1.0, frequency_penalty=0.0, presence_penalty=0.0):
-    response = client.chat.completions.create(
-        messages=[
-            {"role": "system", "content": system_message},
-            {"role": "user", "content": prompt}
-        ],
-        model=model,
-        max_tokens=max_tokens,
-        temperature=temperature,
-        top_p=top_p,
-        frequency_penalty=frequency_penalty,
-        presence_penalty=presence_penalty,
-    )
-    return response
-
-
-def get_score(spell):
-    # example
+def get_score(spell: str) -> int:
     dialogue = call_gpt(spell)
     score, reason = dialogue.choices[0].message.content.split("\n")
     print("score(by criteria): " + score)
@@ -137,6 +117,22 @@ def get_score(spell):
     total_score = int(score) + extra_score
     print("total score: " + str(total_score))
     return total_score
+
+
+def call_gpt(prompt, model="gpt-3.5-turbo-0125", max_tokens=150, temperature=0.7, top_p=1.0, frequency_penalty=0.0, presence_penalty=0.0):
+    response = client.chat.completions.create(
+        messages=[
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": prompt}
+        ],
+        model=model,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        top_p=top_p,
+        frequency_penalty=frequency_penalty,
+        presence_penalty=presence_penalty,
+    )
+    return response
 
 
 def get_extra_score(spell):
